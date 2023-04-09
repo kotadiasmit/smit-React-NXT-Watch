@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 import './index.css'
 import {FaMoon} from 'react-icons/fa'
 import {BsBrightnessHigh} from 'react-icons/bs'
-import {AiFillHome} from 'react-icons/ai'
+import {GiHamburgerMenu} from 'react-icons/gi'
 import {FiLogOut} from 'react-icons/fi'
 
 import {NavHeader, LogoutDesktopBtn} from './styleComponent'
@@ -78,7 +78,10 @@ const Header = props => {
                 </button>
                 <Link to="/jobs">
                   <li className="nav-menu-item-mobile">
-                    <div color="#ffffff" size={32} />
+                    <GiHamburgerMenu
+                      color={isLightTheme ? 'black' : '#ffffff'}
+                      size={30}
+                    />
                   </li>
                 </Link>
               </ul>
@@ -87,7 +90,10 @@ const Header = props => {
                 className="logout-mobile-btn"
                 onClick={onClickLogout}
               >
-                <FiLogOut color="#ffffff" size={30} />
+                <FiLogOut
+                  color={isLightTheme ? 'black' : '#ffffff'}
+                  size={30}
+                />
               </button>
             </div>
           </NavHeader>
