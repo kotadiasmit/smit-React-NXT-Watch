@@ -9,9 +9,15 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-  margin: auto;
+  height: 150vh;
+  margin-left: 230px;
   flex-grow: 1;
+  margin-top: 55px;
+}
+@media (max-width: 576px) {
+  .not-found-page-container {
+    margin-left: 0px;
+  }
 }
 .not-found-light {
   background-color: #ffffff;
@@ -28,4 +34,9 @@
 }
 .dark {
   color: #ffffff;
+}
+@media (max-width: 576px) {
+  .sidebar-for-desktop {
+    display: none;
+  }
 }

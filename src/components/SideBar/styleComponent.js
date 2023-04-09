@@ -5,10 +5,15 @@ export const SideBarContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 90vh;
+  margin-top: 53px;
+  height: 92vh;
+  max-height: 100vh;
   width: 230px;
+  position: fixed;
   @media screen and (max-width: 576px) {
-    display: none;
+    padding-top: 2%;
+    height: 50%;
+    width: 100%;
   }
 `
 
@@ -44,4 +49,6 @@ export const ContactUsPara = styled.p`
   font-size: 13px;
   font-weight: 500;
   color: ${props => (props.isLightTheme ? 'black' : '#ffffff')};
+  margin-bottom: 30px;
+  margin-right: 10px;
 `

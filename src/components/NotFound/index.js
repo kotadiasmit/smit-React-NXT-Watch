@@ -16,7 +16,9 @@ const NotFound = () => (
         <>
           <Header />
           <div className="main-container">
-            <SideBar className="sidebar-for-desktop" />
+            <div className="sidebar-for-desktop">
+              <SideBar />
+            </div>
             <div className={`${bgColor} not-found-page-container`}>
               <img
                 className="not-found-page-img"

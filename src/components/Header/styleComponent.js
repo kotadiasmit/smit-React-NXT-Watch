@@ -6,6 +6,8 @@ export const NavHeader = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
+  position: fixed;
 `
 
 export const LogoutDesktopBtn = styled.button`
