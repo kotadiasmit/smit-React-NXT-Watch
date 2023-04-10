@@ -6,8 +6,14 @@ import {FaMoon} from 'react-icons/fa'
 import {BsBrightnessHigh} from 'react-icons/bs'
 import {GiHamburgerMenu} from 'react-icons/gi'
 import {FiLogOut} from 'react-icons/fi'
+import Popup from 'reactjs-popup'
 import SideBar from '../SideBar'
-import {NavHeader, LogoutDesktopBtn} from './styleComponent'
+import {
+  NavHeader,
+  LogoutDesktopBtn,
+  ModalContainer,
+  LogoutPara,
+} from './styleComponent'
 import ThemeContext from '../../context/ThemeContext'
 
 class Header extends Component {
@@ -40,7 +46,6 @@ class Header extends Component {
           ) : (
             <BsBrightnessHigh color="#ffffff" size={28} />
           )
-          const fontColor = isLightTheme ? '' : 'dark'
           const webLogoUrl = isLightTheme
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
             : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-dark-theme-img.png'
@@ -70,14 +75,43 @@ class Header extends Component {
                     src="https://assets.ccbp.in/frontend/react-js/nxt-watch-profile-img.png"
                     alt="profile"
                   />
-
-                  <LogoutDesktopBtn
-                    isLightTheme={isLightTheme}
-                    type="button"
-                    onClick={this.onClickLogout}
+                  <Popup
+                    modal
+                    trigger={
+                      <LogoutDesktopBtn
+                        isLightTheme={isLightTheme}
+                        type="button"
+                      >
+                        Logout
+                      </LogoutDesktopBtn>
+                    }
+                    className="popup-content"
                   >
-                    Logout
-                  </LogoutDesktopBtn>
+                    {close => (
+                      <ModalContainer isLightTheme={isLightTheme}>
+                        <LogoutPara isLightTheme={isLightTheme}>
+                          Are you sure, you want to logout?
+                        </LogoutPara>
+                        <div>
+                          <button
+                            className="close-button"
+                            type="button"
+                            data-testid="closeButton"
+                            onClick={() => close()}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="Confirm-logout-button"
+                            type="button"
+                            onClick={this.onClickLogout}
+                          >
+                            Confirm
+                          </button>
+                        </div>
+                      </ModalContainer>
+                    )}
+                  </Popup>
                 </div>
 
                 <div className="nav-menu-mobile">
@@ -100,16 +134,43 @@ class Header extends Component {
                       />
                     </button>
                   </ul>
-                  <button
-                    type="button"
-                    className="logout-mobile-btn"
-                    onClick={this.onClickLogout}
+                  <Popup
+                    modal
+                    trigger={
+                      <button type="button" className="logout-mobile-btn">
+                        <FiLogOut
+                          color={isLightTheme ? 'black' : '#ffffff'}
+                          size={30}
+                        />
+                      </button>
+                    }
+                    className="popup-content"
                   >
-                    <FiLogOut
-                      color={isLightTheme ? 'black' : '#ffffff'}
-                      size={30}
-                    />
-                  </button>
+                    {close => (
+                      <ModalContainer isLightTheme={isLightTheme}>
+                        <LogoutPara isLightTheme={isLightTheme}>
+                          Are you sure, you want to logout?
+                        </LogoutPara>
+                        <div>
+                          <button
+                            className="close-button"
+                            type="button"
+                            data-testid="closeButton"
+                            onClick={() => close()}
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            className="Confirm-logout-button"
+                            type="button"
+                            onClick={this.onClickLogout}
+                          >
+                            Confirm
+                          </button>
+                        </div>
+                      </ModalContainer>
+                    )}
+                  </Popup>
                 </div>
               </NavHeader>
               <div className="mobile-sidebar">

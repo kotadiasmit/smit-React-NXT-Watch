@@ -1,0 +1,41 @@
+.main-container {
+  display: flex;
+  justify-content: flex-start;
+}
+.home-page-container {
+  background-color: #181818;
+  display: flex;
+  padding: 9%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-left: 230px;
+  flex-grow: 1;
+  margin-top: 55px;
+}
+@media (max-width: 576px) {
+  .home-page-container {
+    margin-left: 0px;
+  }
+}
+.home-light {
+  background-color: #f9f9f9;
+}
+.failure-view-img {
+  width: 38%;
+  height: 52%;
+}
+.not-found-page-heading {
+  color: black;
+  font-size: 35px;
+  font-weight: 400;
+  text-align: center;
+}
+.dark {
+  color: #ffffff;
+}
+@media (max-width: 576px) {
+  .sidebar-for-desktop {
+    display: none;
+  }
+}

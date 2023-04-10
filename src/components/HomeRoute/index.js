@@ -13,21 +13,26 @@ class HomeRoute extends Component {
       <ThemeContext.Consumer className="main-login-container">
         {value => {
           const {isLightTheme} = value
-          const bgColor = isLightTheme ? 'not-found-light' : ''
+          const bgColor = isLightTheme ? 'home-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
-          const notFoundUrl = isLightTheme
-            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-light-theme-img.png'
-            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-dark-theme-img.png'
+          const failureView = isLightTheme
+            ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+            : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
           return (
             <>
               <Header />
               <div className="main-container">
-                <SideBar className="sidebar-for-desktop" />
-                <div className={`${bgColor} not-found-page-container`}>
+                <div className="sidebar-for-desktop">
+                  <SideBar />
+                </div>
+                <div
+                  className={`${bgColor} home-page-container`}
+                  data-testid="home"
+                >
                   <img
-                    className="not-found-page-img"
-                    alt="not found"
-                    src={notFoundUrl}
+                    className="failure-view-img"
+                    alt="failure view"
+                    src={failureView}
                   />
                   <h1 className={`not-found-page-heading ${fontColor}`}>
                     Page Not Found

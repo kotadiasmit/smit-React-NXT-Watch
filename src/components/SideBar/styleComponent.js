@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const SideBarContainer = styled.div`
-  background-color: ${props => (props.isLightTheme ? '#f9f9f9f9' : '#212121')};
+  background-color: ${props => (props.isLightTheme ? '#ffffff' : '#212121')};
   display: flex;
   flex-direction: column;
   justify-content: space-between;
