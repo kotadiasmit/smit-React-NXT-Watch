@@ -34,9 +34,7 @@ class HomeRoute extends Component {
                     alt="failure view"
                     src={failureView}
                   />
-                  <h1 className={`not-found-page-heading ${fontColor}`}>
-                    Page Not Found
-                  </h1>
+                  <h1 className={`not-found-page-heading ${fontColor}`}>sa</h1>
                   <p
                     style={{
                       color: '#64748b',
