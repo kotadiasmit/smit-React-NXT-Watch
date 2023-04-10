@@ -15,7 +15,7 @@ const NotFound = () => (
       return (
         <>
           <Header />
-          <div className="main-container">
+          <div className="not-found-route-main-container">
             <div className="sidebar-for-desktop">
               <SideBar />
             </div>

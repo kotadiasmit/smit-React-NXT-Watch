@@ -1,0 +1,45 @@
+.video-card-details-container {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 50px;
+  margin-right: 18px;
+  width: 280px;
+}
+.thumbnail-img {
+  width: 280px;
+}
+.video-card-detail {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.profile-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+.other-video-card-detail {
+  color: #7e8b9e;
+  margin-top: 5px;
+  font-size: 14px;
+  margin-bottom: 0px;
+  margin-right: 10px;
+}
+.views-published-container {
+  display: flex;
+}
+.font-size {
+  font-weight: 800;
+}
+@media screen and (max-width: 577px) {
+  .thumbnail-img {
+    width: 310px;
+  }
+  .video-details-container {
+    margin-right: 0px;
+    width: 310px;
+  }
+}

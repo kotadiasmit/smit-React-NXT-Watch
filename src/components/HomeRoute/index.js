@@ -6,6 +6,7 @@ import Cookies from 'js-cookie'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
+import HomeRouteVideoCard from '../HomeRouteVideoCard'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -15,7 +16,11 @@ const apiStatusConstants = {
 }
 
 class HomeRoute extends Component {
-  state = {searchInput: '', apiStatus: apiStatusConstants.initial}
+  state = {
+    searchInput: '',
+    apiStatus: apiStatusConstants.initial,
+    homeRouteVideosList: [],
+  }
 
   componentDidMount() {
     this.getVideosListApi()
@@ -34,11 +39,70 @@ class HomeRoute extends Component {
     }
     const response = await fetch(homeRouteVideosFetchUrl, options)
     const data = await response.json()
+
+    if (response.ok) {
+      const camelCaseData = data.videos.map(each => ({
+        id: each.id,
+        title: each.title,
+        publishedAt: each.published_at,
+        viewCount: each.view_count,
+        channel: {
+          name: each.channel.name,
+          profileImageUrl: each.channel.profile_image_url,
+        },
+        thumbnailUrl: each.thumbnail_url,
+      }))
+      console.log(camelCaseData)
+      this.setState({
+        apiStatus: apiStatusConstants.success,
+        homeRouteVideosList: camelCaseData,
+      })
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
+    }
   }
 
-  renderVideosList = () => {
-    const {searchInput} = this.state
-    return <div>sdv</div>
+  onSearchRetryClicked = () => {
+    this.getJobListApi()
+  }
+
+  renderNoVideos = fontColor => (
+    <div className="not-videos-found-page-container">
+      <img
+        className="not-videos-found-page-img"
+        src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png"
+        alt="no videos"
+      />
+      <h1 className={`not-found-page-heading ${fontColor}`}>
+        No Search results Found
+      </h1>
+      <p style={{color: '#64748b', marginTop: '0px', textAlign: 'center'}}>
+        Try different key words or remove search filter
+      </p>
+      <button
+        className="retry-btn"
+        type="button"
+        onClick={this.onSearchRetryClicked}
+      >
+        Retry
+      </button>
+    </div>
+  )
+
+  renderVideosList = isLightTheme => {
+    const {homeRouteVideosList} = this.state
+    if (homeRouteVideosList.length === 0) {
+      return this.renderNoVideos(isLightTheme)
+    }
+    return (
+      <ul className="home-route-video-list-container">
+        {homeRouteVideosList.map(eachVideo => (
+          <HomeRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
+        ))}
+      </ul>
+    )
   }
 
   renderVideosListFailureView = (failureView, fontColor) => (
@@ -59,7 +123,7 @@ class HomeRoute extends Component {
       <button
         className="retry-btn"
         type="button"
-        onClick={this.onJobSearchRetryClicked}
+        onClick={this.onSearchRetryClicked}
       >
         Retry
       </button>
@@ -82,7 +146,7 @@ class HomeRoute extends Component {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderVideosList()
+        return this.renderVideosList(fontColor)
       case apiStatusConstants.failure:
         return this.renderVideosListFailureView(failureView, fontColor)
       case apiStatusConstants.inProgress:
@@ -97,10 +161,7 @@ class HomeRoute extends Component {
   }
 
   onSearchInputBtnClicked = () => {
-    const {searchInput} = this.state
-    if (searchInput !== '') {
-      this.getVideosListApi()
-    }
+    this.getVideosListApi()
   }
 
   render() {
