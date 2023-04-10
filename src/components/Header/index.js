@@ -63,6 +63,7 @@ class Header extends Component {
 
                 <div className="nav-content">
                   <button
+                    type="button"
                     className="theme-logo-btn"
                     data-testid="theme"
                     onClick={onThemeChange}
@@ -117,6 +118,7 @@ class Header extends Component {
                 <div className="nav-menu-mobile">
                   <ul className="nav-menu-list-mobile">
                     <button
+                      type="button"
                       className="theme-logo-btn"
                       data-testid="theme"
                       onClick={onThemeChange}
