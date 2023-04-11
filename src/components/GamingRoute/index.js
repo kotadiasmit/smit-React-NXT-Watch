@@ -3,7 +3,7 @@ import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 
-import {HiFire} from 'react-icons/hi'
+import {GiGamepad} from 'react-icons/gi'
 import {
   FailureViewRetryBtn,
   GamingPageMainContainer,
@@ -160,7 +160,7 @@ class GamingRoute extends Component {
   bannerContainer = isLightTheme => (
     <GamingBannerContainer isLightTheme={isLightTheme} data-testid="banner">
       <GamingBannerSubContainer isLightTheme={isLightTheme}>
-        <HiFire size={30} color="#ff0000" />
+        <GiGamepad size={30} color="#ff0000" />
       </GamingBannerSubContainer>
       <GamingBannerPara isLightTheme={isLightTheme}>Gaming</GamingBannerPara>
     </GamingBannerContainer>

@@ -43,7 +43,7 @@ export const GamingBannerSubContainer = styled.div`
   justify-content: center;
   align-items: center;
 `
-export const GamingBannerPara = styled.p`
+export const GamingBannerPara = styled.h1`
   font-weight: 600;
   font-size: 20px;
   color: ${props => (props.isLightTheme ? '#0f0f0f' : '#ffffff')};

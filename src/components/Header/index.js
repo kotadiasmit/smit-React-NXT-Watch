@@ -37,10 +37,15 @@ class Header extends Component {
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
-          const {isLightTheme, changeTheme} = value
+          const {isLightTheme, changeTheme, onSelectedRoute} = value
           const onThemeChange = () => {
             changeTheme()
           }
+
+          const onHomeRouteClicked = () => {
+            onSelectedRoute('/')
+          }
+
           const themeBtn = isLightTheme ? (
             <FaMoon size={28} />
           ) : (
@@ -58,6 +63,7 @@ class Header extends Component {
                     className="website-logo"
                     src={webLogoUrl}
                     alt="website logo"
+                    onClick={onHomeRouteClicked}
                   />
                 </Link>
 

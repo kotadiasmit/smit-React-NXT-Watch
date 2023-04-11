@@ -43,7 +43,7 @@ export const TrendingBannerSubContainer = styled.div`
   justify-content: center;
   align-items: center;
 `
-export const TrendingBannerPara = styled.p`
+export const TrendingBannerPara = styled.h1`
   font-weight: 600;
   font-size: 20px;
   color: ${props => (props.isLightTheme ? '#0f0f0f' : '#ffffff')};
