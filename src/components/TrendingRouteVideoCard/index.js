@@ -4,7 +4,7 @@ import {formatDistanceToNow} from 'date-fns'
 import {VideoCardPara} from './styleComponent'
 import ThemeContext from '../../context/ThemeContext'
 
-const HomeRouteVideoCard = props => {
+const TrendingRouteVideoCard = props => {
   const {videoDetails} = props
   const {
     channel,
@@ -25,17 +25,17 @@ const HomeRouteVideoCard = props => {
         const {isLightTheme} = value
         return (
           <>
-            <li className="video-card-details-container">
-              <Link to={`/videos/${id}`} className="route-link">
+            <Link to={`/videos/${id}`} className="route-link">
+              <li className="trending-video-card-details-container">
                 <img
                   src={thumbnailUrl}
                   className="thumbnail-img"
                   alt="video thumbnail"
                 />
-                <div className="video-card-detail">
+                <div className="trending-video-card-detail">
                   <img
                     src={channel.profileImageUrl}
-                    className="profile-img"
+                    className="trending-profile-img"
                     alt="channel logo"
                   />
                   <div>
@@ -52,12 +52,12 @@ const HomeRouteVideoCard = props => {
                     </div>
                   </div>
                 </div>
-              </Link>
-            </li>
+              </li>
+            </Link>
           </>
         )
       }}
     </ThemeContext.Consumer>
   )
 }
-export default HomeRouteVideoCard
+export default TrendingRouteVideoCard

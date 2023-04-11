@@ -39,7 +39,7 @@ export const SideBarRouteName = styled.p`
   color: ${props => (props.isLightTheme ? 'black' : '#ffffff')};
   font-weight: ${props => (props.isSelected ? 700 : 400)};
 `
-export const ContactUsHeading = styled.h1`
+export const ContactUsHeading = styled.p`
   font-size: 16px;
   font-weight: 500;
   color: ${props => (props.isLightTheme ? 'black' : '#ffffff')};

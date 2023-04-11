@@ -14,19 +14,26 @@ import ProtectedRoute from './components/ProtectedRoute'
 class App extends Component {
   state = {
     isLightTheme: true,
+    selectedRoute: '/',
   }
 
   changeTheme = () => {
     this.setState(prevState => ({isLightTheme: !prevState.isLightTheme}))
   }
 
+  onSelectedRoute = route => {
+    this.setState({selectedRoute: route})
+  }
+
   render() {
-    const {isLightTheme} = this.state
+    const {isLightTheme, selectedRoute} = this.state
     return (
       <ThemeContext.Provider
         value={{
           isLightTheme,
           changeTheme: this.changeTheme,
+          selectedRoute,
+          onSelectedRoute: this.onSelectedRoute,
         }}
       >
         <Switch>
@@ -37,8 +44,8 @@ class App extends Component {
             path="/videos/:id"
             component={VideoItemDetails}
           />
-          <ProtectedRoute exact path="/trending" component={NotFound} />
-          <ProtectedRoute exact path="/gaming" component={NotFound} />
+          <ProtectedRoute exact path="/trending" component={TrendingRoute} />
+          <ProtectedRoute exact path="/gaming" component={GamingRoute} />
           <ProtectedRoute exact path="/saved-videos" component={NotFound} />
           <Route exact path="/not-found" component={NotFound} />
           <Redirect to="/not-found" />

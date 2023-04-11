@@ -16,36 +16,34 @@ import {
 import ThemeContext from '../../context/ThemeContext'
 
 class SideBar extends Component {
-  state = {selectedRoute: '/'}
-
-  onHomeRouteClicked = () => {
-    this.setState({selectedRoute: '/'})
-  }
-
-  onTrendingRouteClicked = () => {
-    this.setState({selectedRoute: '/trending'})
-  }
-
-  onGamingRouteClicked = () => {
-    this.setState({selectedRoute: '/gaming'})
-  }
-
-  onSavedVideosRouteClicked = () => {
-    this.setState({selectedRoute: '/saved-videos'})
-  }
+  state = {Route: '/'}
 
   render() {
-    const {selectedRoute} = this.state
-    console.log(selectedRoute)
     return (
       <ThemeContext.Consumer>
         {value => {
-          const {isLightTheme} = value
+          const {isLightTheme, selectedRoute, onSelectedRoute} = value
           let isSelected
           if (isLightTheme) {
             isSelected = '#f1f5f9'
           } else {
             isSelected = '#313131'
+          }
+
+          const onHomeRouteClicked = () => {
+            onSelectedRoute('/')
+          }
+
+          const onTrendingRouteClicked = () => {
+            onSelectedRoute('/trending')
+          }
+
+          const onGamingRouteClicked = () => {
+            onSelectedRoute('/gaming')
+          }
+
+          const onSavedVideosRouteClicked = () => {
+            onSelectedRoute('/saved-videos')
           }
 
           const contactUsContainer = () => (
@@ -70,7 +68,7 @@ class SideBar extends Component {
                   src="https://assets.ccbp.in/frontend/react-js/nxt-watch-linked-in-logo-img.png"
                 />
                 <ContactUsPara isLightTheme={isLightTheme}>
-                  Enjoy! Now to see your channels and recommendation
+                  Enjoy! Now to see your channels and recommendations!
                 </ContactUsPara>
               </div>
             </>
@@ -84,7 +82,7 @@ class SideBar extends Component {
                     isRouteSelected={
                       selectedRoute === '/' ? isSelected : 'transparent'
                     }
-                    onClick={this.onHomeRouteClicked}
+                    onClick={onHomeRouteClicked}
                   >
                     <TiHome
                       color={selectedRoute === '/' ? '#ff0000' : '#475569'}
@@ -103,7 +101,7 @@ class SideBar extends Component {
                     isRouteSelected={
                       selectedRoute === '/trending' ? isSelected : 'transparent'
                     }
-                    onClick={this.onTrendingRouteClicked}
+                    onClick={onTrendingRouteClicked}
                   >
                     <HiFire
                       size={23}
@@ -124,7 +122,7 @@ class SideBar extends Component {
                     isRouteSelected={
                       selectedRoute === '/gaming' ? isSelected : 'transparent'
                     }
-                    onClick={this.onGamingRouteClicked}
+                    onClick={onGamingRouteClicked}
                   >
                     <GiGamepad
                       color={
@@ -147,7 +145,7 @@ class SideBar extends Component {
                         ? isSelected
                         : 'transparent'
                     }
-                    onClick={this.onSavedVideosRouteClicked}
+                    onClick={onSavedVideosRouteClicked}
                   >
                     <MdPlaylistAdd
                       color={
@@ -161,7 +159,7 @@ class SideBar extends Component {
                       isLightTheme={isLightTheme}
                       isSelected={selectedRoute === '/saved-videos'}
                     >
-                      Saved-videos
+                      Saved videos
                     </SideBarRouteName>
                   </SideBarRouteContainer>
                 </Link>

@@ -4,6 +4,11 @@ import {BsSearch} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import {AiOutlineClose} from 'react-icons/ai'
+import {
+  FailureViewRetryBtn,
+  HomePageMainContainer,
+  HomeBannerContainer,
+} from './styleComponent'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
@@ -54,7 +59,7 @@ class HomeRoute extends Component {
         },
         thumbnailUrl: each.thumbnail_url,
       }))
-      console.log(camelCaseData)
+      // console.log(camelCaseData)
       this.setState({
         apiStatus: apiStatusConstants.success,
         homeRouteVideosList: camelCaseData,
@@ -67,7 +72,7 @@ class HomeRoute extends Component {
   }
 
   onSearchRetryClicked = () => {
-    this.getJobListApi()
+    this.getVideosListApi()
   }
 
   renderNoVideos = fontColor => (
@@ -120,15 +125,15 @@ class HomeRoute extends Component {
           textAlign: 'center',
         }}
       >
-        We can not seem to find the page your are looking for.
+        We are having some trouble to complete your request. Please try again.
       </p>
-      <button
+      <FailureViewRetryBtn
         className="retry-btn"
         type="button"
         onClick={this.onSearchRetryClicked}
       >
         Retry
-      </button>
+      </FailureViewRetryBtn>
     </>
   )
 
@@ -171,7 +176,7 @@ class HomeRoute extends Component {
   }
 
   bannerContainer = () => (
-    <div className="home-banner-container" data-testid="banner">
+    <HomeBannerContainer data-testid="banner">
       <div className="home-banner-sub-container">
         <img
           alt="nxt watch logo"
@@ -187,10 +192,11 @@ class HomeRoute extends Component {
         className="banner-close-btn"
         onClick={this.onCloseBanner}
         data-testid="close"
+        type="button"
       >
         <AiOutlineClose />
       </button>
-    </div>
+    </HomeBannerContainer>
   )
 
   render() {
@@ -211,12 +217,12 @@ class HomeRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <div className="home-page-main-container" data-testid="home">
+                <HomePageMainContainer
+                  isLightTheme={isLightTheme}
+                  data-testid="home"
+                >
                   {closeBanner ? '' : this.bannerContainer()}
-                  <div
-                    className={`${bgColor} home-page-container`}
-                    data-testid="home"
-                  >
+                  <div className={`${bgColor} home-page-container`}>
                     <div className="search-bar-container">
                       <input
                         className={`search-input ${fontColor}`}
@@ -229,8 +235,9 @@ class HomeRoute extends Component {
                         type="button"
                         className="search-btn"
                         onClick={this.onSearchInputBtnClicked}
+                        data-testid="searchButton"
                       >
-                        <BsSearch color="#e6ebf1" size={18} />
+                        <BsSearch size={18} color="#e6ebf1" />
                       </button>
                     </div>
                     {this.returnSwitchStatement(
@@ -239,7 +246,7 @@ class HomeRoute extends Component {
                       isLightTheme,
                     )}
                   </div>
-                </div>
+                </HomePageMainContainer>
               </div>
             </>
           )
