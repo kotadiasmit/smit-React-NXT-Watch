@@ -66,10 +66,6 @@
   align-self: center;
 }
 
-.dark {
-  color: #ffffff;
-}
-
 .search-bar-container {
   border-radius: 4px;
   border: 1px solid #434e67;
@@ -128,6 +124,9 @@
   font-size: 35px;
   font-weight: 400;
   text-align: center;
+}
+.dark {
+  color: #ffffff;
 }
 .loader-container {
   height: 100vh;

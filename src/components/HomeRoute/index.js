@@ -98,10 +98,10 @@ class HomeRoute extends Component {
     </div>
   )
 
-  renderVideosList = isLightTheme => {
+  renderVideosList = fontColor => {
     const {homeRouteVideosList} = this.state
     if (homeRouteVideosList.length === 0) {
-      return this.renderNoVideos(isLightTheme)
+      return this.renderNoVideos(fontColor)
     }
     return (
       <ul className="home-route-video-list-container">
