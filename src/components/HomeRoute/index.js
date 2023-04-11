@@ -3,6 +3,7 @@ import {Component} from 'react'
 import {BsSearch} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
+import {AiOutlineClose} from 'react-icons/ai'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
@@ -20,6 +21,7 @@ class HomeRoute extends Component {
     searchInput: '',
     apiStatus: apiStatusConstants.initial,
     homeRouteVideosList: [],
+    closeBanner: false,
   }
 
   componentDidMount() {
@@ -164,8 +166,35 @@ class HomeRoute extends Component {
     this.getVideosListApi()
   }
 
+  onCloseBanner = () => {
+    this.setState(prevState => ({closeBanner: !prevState.closeBanner}))
+  }
+
+  bannerContainer = () => (
+    <div className="home-banner-container" data-testid="banner">
+      <div className="home-banner-sub-container">
+        <img
+          alt="nxt watch logo"
+          className="website-logo"
+          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
+        />
+        <p>Buy Nxt Watch Premium prepaid plans with UPI</p>
+        <button type="button" className="get-now-btn">
+          GET IT NOW
+        </button>
+      </div>
+      <button
+        className="banner-close-btn"
+        onClick={this.onCloseBanner}
+        data-testid="close"
+      >
+        <AiOutlineClose />
+      </button>
+    </div>
+  )
+
   render() {
-    const {searchInput} = this.state
+    const {searchInput, closeBanner} = this.state
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
@@ -182,31 +211,34 @@ class HomeRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <div
-                  className={`${bgColor} home-page-container`}
-                  data-testid="home"
-                >
-                  <div className="search-bar-container">
-                    <input
-                      className={`search-input ${fontColor}`}
-                      type="search"
-                      placeholder="Search"
-                      onChange={this.onSearchInput}
-                      value={searchInput}
-                    />
-                    <button
-                      type="button"
-                      className="search-btn"
-                      onClick={this.onSearchInputBtnClicked}
-                    >
-                      <BsSearch color="#e6ebf1" size={18} />
-                    </button>
+                <div className="home-page-main-container" data-testid="home">
+                  {closeBanner ? '' : this.bannerContainer()}
+                  <div
+                    className={`${bgColor} home-page-container`}
+                    data-testid="home"
+                  >
+                    <div className="search-bar-container">
+                      <input
+                        className={`search-input ${fontColor}`}
+                        type="search"
+                        placeholder="Search"
+                        onChange={this.onSearchInput}
+                        value={searchInput}
+                      />
+                      <button
+                        type="button"
+                        className="search-btn"
+                        onClick={this.onSearchInputBtnClicked}
+                      >
+                        <BsSearch color="#e6ebf1" size={18} />
+                      </button>
+                    </div>
+                    {this.returnSwitchStatement(
+                      failureView,
+                      fontColor,
+                      isLightTheme,
+                    )}
                   </div>
-                  {this.returnSwitchStatement(
-                    failureView,
-                    fontColor,
-                    isLightTheme,
-                  )}
                 </div>
               </div>
             </>
