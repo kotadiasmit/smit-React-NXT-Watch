@@ -107,7 +107,7 @@ class GamingRoute extends Component {
   }
 
   renderVideosListFailureView = (failureView, fontColor) => (
-    <>
+    <div className="failure-view-container">
       <img className="failure-view-img" alt="failure view" src={failureView} />
       <h1 className={`not-found-page-heading ${fontColor}`}>
         Oops! Something Went Wrong
@@ -128,7 +128,7 @@ class GamingRoute extends Component {
       >
         Retry
       </FailureViewRetryBtn>
-    </>
+    </div>
   )
 
   renderLoadingView = isLightTheme => (

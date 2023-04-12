@@ -8,7 +8,7 @@ import NotFound from './components/NotFound'
 import GamingRoute from './components/GamingRoute'
 import SavedVideos from './components/SavedVideos'
 import TrendingRoute from './components/TrendingRoute'
-import VideoItemDetails from './components/VideoItemDetails'
+import VideoItemDetailsRoute from './components/VideoItemDetailsRoute'
 import ProtectedRoute from './components/ProtectedRoute'
 
 class App extends Component {
@@ -42,7 +42,7 @@ class App extends Component {
           <ProtectedRoute
             exact
             path="/videos/:id"
-            component={VideoItemDetails}
+            component={VideoItemDetailsRoute}
           />
           <ProtectedRoute exact path="/trending" component={TrendingRoute} />
           <ProtectedRoute exact path="/gaming" component={GamingRoute} />

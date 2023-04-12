@@ -1,18 +1,17 @@
 import './index.css'
 import {Component} from 'react'
-import {BsSearch} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {AiOutlineClose} from 'react-icons/ai'
+import ReactPlayer from 'react-player'
+import {MdPlaylistAdd} from 'react-icons/md'
+import {BiDislike, BiLike} from 'react-icons/bi'
 import {
   FailureViewRetryBtn,
-  HomePageMainContainer,
-  HomeBannerContainer,
+  VideoItemDetailsPageMainContainer,
 } from './styleComponent'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
-import HomeRouteVideoCard from '../HomeRouteVideoCard'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -21,48 +20,51 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class HomeRoute extends Component {
+class VideoItemDetailsRoute extends Component {
   state = {
-    searchInput: '',
     apiStatus: apiStatusConstants.initial,
-    homeRouteVideosList: [],
-    closeBanner: false,
+    videoDetailObject: {},
   }
 
   componentDidMount() {
-    this.getVideosListApi()
+    this.getVideoItemDetailsApi()
   }
 
-  getVideosListApi = async () => {
+  getVideoItemDetailsApi = async () => {
+    const {match} = this.props
+    const {params} = match
+    const {id} = params
     this.setState({apiStatus: apiStatusConstants.inProgress})
-    const {searchInput} = this.state
     const jwtToken = Cookies.get('jwt_token')
-    const homeRouteVideosFetchUrl = `https://apis.ccbp.in/videos/all?search=${searchInput}`
+    const VideoItemDetailsRouteVideosFetchUrl = `https://apis.ccbp.in/videos/${id}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const response = await fetch(homeRouteVideosFetchUrl, options)
+    const response = await fetch(VideoItemDetailsRouteVideosFetchUrl, options)
     const data = await response.json()
-
+    const videoDetails = data.video_details
     if (response.ok) {
-      const camelCaseData = data.videos.map(each => ({
-        id: each.id,
-        title: each.title,
-        publishedAt: each.published_at,
-        viewCount: each.view_count,
+      const camelCaseData = {
+        description: videoDetails.description,
+        id: videoDetails.id,
+        title: videoDetails.title,
+        publishedAt: videoDetails.published_at,
+        videoUrl: videoDetails.video_url,
+        viewCount: videoDetails.view_count,
         channel: {
-          name: each.channel.name,
-          profileImageUrl: each.channel.profile_image_url,
+          name: videoDetails.channel.name,
+          profileImageUrl: videoDetails.channel.profile_image_url,
+          subscriberCount: videoDetails.subscriber_count,
         },
-        thumbnailUrl: each.thumbnail_url,
-      }))
-      // console.log(camelCaseData)
+        thumbnailUrl: videoDetails.thumbnail_url,
+      }
+      console.log(camelCaseData)
       this.setState({
         apiStatus: apiStatusConstants.success,
-        homeRouteVideosList: camelCaseData,
+        videoDetailObject: camelCaseData,
       })
     } else {
       this.setState({
@@ -72,7 +74,7 @@ class HomeRoute extends Component {
   }
 
   onSearchRetryClicked = () => {
-    this.getVideosListApi()
+    this.getVideoItemDetailsApi()
   }
 
   renderNoVideos = fontColor => (
@@ -98,21 +100,53 @@ class HomeRoute extends Component {
     </div>
   )
 
-  renderVideosList = fontColor => {
-    const {homeRouteVideosList} = this.state
-    if (homeRouteVideosList.length === 0) {
-      return this.renderNoVideos(fontColor)
+  renderVideoItemDetails = (fontColor, isLightTheme) => {
+    const {videoDetailObject} = this.state
+    console.log(Object.keys(videoDetailObject))
+    const {
+      description,
+      id,
+      title,
+      publishedAt,
+      videoUrl,
+      viewCount,
+      channel,
+      thumbnailUrl,
+    } = videoDetailObject
+    const {name, profileImageUrl, subscriberCount} = channel
+    if (videoDetailObject.length === 0) {
+      return this.renderNoVideos(isLightTheme)
     }
     return (
-      <ul className="home-route-video-list-container">
-        {homeRouteVideosList.map(eachVideo => (
-          <HomeRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
-        ))}
-      </ul>
+      <div className="video-item-details-container">
+        <div className="react-player">
+          <ReactPlayer
+            url={videoUrl}
+            controls="true"
+            width="100%"
+            height="100%"
+          />
+        </div>
+        <p className={`video-item-heading ${fontColor}`}>{title}</p>
+        <div className="item-views-like-save-container">
+          <div className="views-published-container">
+            <p className="other-video-card-detail">{`${viewCount} views`}</p>
+            <p className="other-video-card-detail font-size">
+              <sup>.</sup>
+            </p>
+            <p className="other-video-card-detail">{publishedAt}</p>
+          </div>
+          <div>
+            <BiLike />
+            <BiDislike />
+            <MdPlaylistAdd />
+          </div>
+        </div>
+      </div>
     )
   }
 
-  renderVideosListFailureView = (failureView, fontColor) => (
+  renderVideoItemDetailsFailureView = (failureView, fontColor) => (
     <div className="failure-view-container">
       <img className="failure-view-img" alt="failure view" src={failureView} />
       <h1 className={`not-found-page-heading ${fontColor}`}>
@@ -153,9 +187,9 @@ class HomeRoute extends Component {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderVideosList(fontColor)
+        return this.renderVideoItemDetails(fontColor)
       case apiStatusConstants.failure:
-        return this.renderVideosListFailureView(failureView, fontColor)
+        return this.renderVideoItemDetailsFailureView(failureView, fontColor)
       case apiStatusConstants.inProgress:
         return this.renderLoadingView(isLightTheme)
       default:
@@ -163,49 +197,12 @@ class HomeRoute extends Component {
     }
   }
 
-  onSearchInput = event => {
-    this.setState({searchInput: event.target.value})
-  }
-
-  onSearchInputBtnClicked = () => {
-    this.getVideosListApi()
-  }
-
-  onCloseBanner = () => {
-    this.setState(prevState => ({closeBanner: !prevState.closeBanner}))
-  }
-
-  bannerContainer = () => (
-    <HomeBannerContainer data-testid="banner">
-      <div className="home-banner-sub-container">
-        <img
-          alt="nxt watch logo"
-          className="website-logo"
-          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-        />
-        <p>Buy Nxt Watch Premium prepaid plans with UPI</p>
-        <button type="button" className="get-now-btn">
-          GET IT NOW
-        </button>
-      </div>
-      <button
-        className="banner-close-btn"
-        onClick={this.onCloseBanner}
-        data-testid="close"
-        type="button"
-      >
-        <AiOutlineClose />
-      </button>
-    </HomeBannerContainer>
-  )
-
   render() {
-    const {searchInput, closeBanner} = this.state
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
           const {isLightTheme} = value
-          const bgColor = isLightTheme ? 'home-light' : ''
+          const bgColor = isLightTheme ? 'videoItemDetails-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           const failureView = isLightTheme
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
@@ -217,36 +214,18 @@ class HomeRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <HomePageMainContainer
+                <VideoItemDetailsPageMainContainer
                   isLightTheme={isLightTheme}
-                  data-testid="home"
+                  data-testid="videoItemDetails"
                 >
-                  {closeBanner ? '' : this.bannerContainer()}
-                  <div className={`${bgColor} home-page-container`}>
-                    <div className="search-bar-container">
-                      <input
-                        className={`search-input ${fontColor}`}
-                        type="search"
-                        placeholder="Search"
-                        onChange={this.onSearchInput}
-                        value={searchInput}
-                      />
-                      <button
-                        type="button"
-                        className="search-btn"
-                        onClick={this.onSearchInputBtnClicked}
-                        data-testid="searchButton"
-                      >
-                        <BsSearch size={18} color="#e6ebf1" />
-                      </button>
-                    </div>
+                  <div className={`${bgColor} videoItemDetails-page-container`}>
                     {this.returnSwitchStatement(
                       failureView,
                       fontColor,
                       isLightTheme,
                     )}
                   </div>
-                </HomePageMainContainer>
+                </VideoItemDetailsPageMainContainer>
               </div>
             </>
           )
@@ -255,4 +234,4 @@ class HomeRoute extends Component {
     )
   }
 }
-export default HomeRoute
+export default VideoItemDetailsRoute
