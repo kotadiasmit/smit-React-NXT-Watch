@@ -22,3 +22,9 @@ export const VideoItemDetailsPageMainContainer = styled.div`
     margin-left: 0px;
   }
 `
+export const VideoCardPara = styled.p`
+  color: ${props => (props.isLightTheme ? '#0f0f0f' : '#ffffff')};
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 400;
+`

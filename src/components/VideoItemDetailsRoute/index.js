@@ -8,6 +8,7 @@ import {BiDislike, BiLike} from 'react-icons/bi'
 import {
   FailureViewRetryBtn,
   VideoItemDetailsPageMainContainer,
+  VideoCardPara,
 } from './styleComponent'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
@@ -57,7 +58,7 @@ class VideoItemDetailsRoute extends Component {
         channel: {
           name: videoDetails.channel.name,
           profileImageUrl: videoDetails.channel.profile_image_url,
-          subscriberCount: videoDetails.subscriber_count,
+          subscriberCount: videoDetails.channel.subscriber_count,
         },
         thumbnailUrl: videoDetails.thumbnail_url,
       }
@@ -100,9 +101,25 @@ class VideoItemDetailsRoute extends Component {
     </div>
   )
 
-  renderVideoItemDetails = (fontColor, isLightTheme) => {
+  renderVideoItemDetails = (
+    fontColor,
+    isLightTheme,
+    saveVideo,
+    savedVideosList,
+    videoLiked,
+    likedVideosList,
+    disLikedVideosList,
+    videoDisLiked,
+  ) => {
     const {videoDetailObject} = this.state
-    console.log(Object.keys(videoDetailObject))
+    function onSaveVideo() {
+      saveVideo(videoDetailObject)
+    }
+    const isVideoSaved = savedVideosList.find(
+      each => videoDetailObject.id === each.id,
+    )
+    const savedVideoColorClass = isVideoSaved ? 'blue-color' : ''
+    // console.log(Object.keys(videoDetailObject))
     const {
       description,
       id,
@@ -114,6 +131,18 @@ class VideoItemDetailsRoute extends Component {
       thumbnailUrl,
     } = videoDetailObject
     const {name, profileImageUrl, subscriberCount} = channel
+
+    function onLikeVideo() {
+      videoLiked(id)
+    }
+    function onDisLikeVideo() {
+      videoDisLiked(id)
+    }
+    const isVideoLiked = likedVideosList.includes(id)
+    const isVideoDisLiked = disLikedVideosList.includes(id)
+    const likedColorClass = isVideoLiked ? 'blue-color' : ''
+    const disLikedColorClass = isVideoDisLiked ? 'blue-color' : ''
+
     if (videoDetailObject.length === 0) {
       return this.renderNoVideos(isLightTheme)
     }
@@ -122,9 +151,10 @@ class VideoItemDetailsRoute extends Component {
         <div className="react-player">
           <ReactPlayer
             url={videoUrl}
-            controls="true"
+            controls
             width="100%"
             height="100%"
+            alt={`${title} Video`}
           />
         </div>
         <p className={`video-item-heading ${fontColor}`}>{title}</p>
@@ -136,10 +166,46 @@ class VideoItemDetailsRoute extends Component {
             </p>
             <p className="other-video-card-detail">{publishedAt}</p>
           </div>
+          <div className="like-save-btn-container">
+            <button type="button" className="btn" onClick={onLikeVideo}>
+              <BiLike color={isVideoLiked ? '#075ac6' : '#7e8b9e'} size={20} />
+              <p className={`other-video-card-detail ${likedColorClass}`}>
+                Like
+              </p>
+            </button>
+            <button type="button" className="btn" onClick={onDisLikeVideo}>
+              <BiDislike
+                color={isVideoDisLiked ? '#075ac6' : '#7e8b9e'}
+                size={20}
+              />
+              <p className={`other-video-card-detail ${disLikedColorClass}`}>
+                Dislike
+              </p>
+            </button>
+            <button type="button" className="btn" onClick={onSaveVideo}>
+              <MdPlaylistAdd
+                color={isVideoSaved ? '#075ac6' : '#7e8b9e'}
+                size={22}
+              />
+              <p className={`other-video-card-detail ${savedVideoColorClass}`}>
+                {isVideoSaved ? 'Saved' : 'Save'}
+              </p>
+            </button>
+          </div>
+        </div>
+        <hr />
+        <div className="video-item-card-detail">
+          <img
+            src={profileImageUrl}
+            className="trending-profile-img"
+            alt="channel logo"
+          />
           <div>
-            <BiLike />
-            <BiDislike />
-            <MdPlaylistAdd />
+            <VideoCardPara isLightTheme={isLightTheme}>{name}</VideoCardPara>
+            <p className="other-video-item-card-detail">{`${subscriberCount} subscribers`}</p>
+            <VideoCardPara isLightTheme={isLightTheme}>
+              {description}
+            </VideoCardPara>
           </div>
         </div>
       </div>
@@ -183,11 +249,30 @@ class VideoItemDetailsRoute extends Component {
     </div>
   )
 
-  returnSwitchStatement = (failureView, fontColor, isLightTheme) => {
+  returnSwitchStatement = (
+    failureView,
+    fontColor,
+    isLightTheme,
+    saveVideo,
+    savedVideosList,
+    videoLiked,
+    likedVideosList,
+    disLikedVideosList,
+    videoDisLiked,
+  ) => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.success:
-        return this.renderVideoItemDetails(fontColor)
+        return this.renderVideoItemDetails(
+          fontColor,
+          isLightTheme,
+          saveVideo,
+          savedVideosList,
+          videoLiked,
+          likedVideosList,
+          disLikedVideosList,
+          videoDisLiked,
+        )
       case apiStatusConstants.failure:
         return this.renderVideoItemDetailsFailureView(failureView, fontColor)
       case apiStatusConstants.inProgress:
@@ -201,7 +286,15 @@ class VideoItemDetailsRoute extends Component {
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
-          const {isLightTheme} = value
+          const {
+            isLightTheme,
+            saveVideo,
+            savedVideosList,
+            videoLiked,
+            likedVideosList,
+            disLikedVideosList,
+            videoDisLiked,
+          } = value
           const bgColor = isLightTheme ? 'videoItemDetails-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           const failureView = isLightTheme
@@ -223,6 +316,12 @@ class VideoItemDetailsRoute extends Component {
                       failureView,
                       fontColor,
                       isLightTheme,
+                      saveVideo,
+                      savedVideosList,
+                      videoLiked,
+                      likedVideosList,
+                      disLikedVideosList,
+                      videoDisLiked,
                     )}
                   </div>
                 </VideoItemDetailsPageMainContainer>

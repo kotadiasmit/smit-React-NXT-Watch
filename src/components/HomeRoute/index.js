@@ -59,7 +59,7 @@ class HomeRoute extends Component {
         },
         thumbnailUrl: each.thumbnail_url,
       }))
-      // console.log(camelCaseData)
+      console.log(camelCaseData)
       this.setState({
         apiStatus: apiStatusConstants.success,
         homeRouteVideosList: camelCaseData,

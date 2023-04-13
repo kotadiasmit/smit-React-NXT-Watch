@@ -15,6 +15,9 @@ class App extends Component {
   state = {
     isLightTheme: true,
     selectedRoute: '/',
+    savedVideosList: [],
+    likedVideosList: [],
+    disLikedVideosList: [],
   }
 
   changeTheme = () => {
@@ -25,8 +28,65 @@ class App extends Component {
     this.setState({selectedRoute: route})
   }
 
+  videoLiked = id => {
+    const {likedVideosList, disLikedVideosList} = this.state
+    if (likedVideosList.includes(id) === false) {
+      if (disLikedVideosList.includes(id)) {
+        this.setState({
+          disLikedVideosList: disLikedVideosList.filter(each => each !== id),
+          likedVideosList: [...likedVideosList, id],
+        })
+      } else {
+        this.setState({
+          likedVideosList: [...likedVideosList, id],
+        })
+      }
+    }
+  }
+
+  videoDisLiked = id => {
+    const {likedVideosList, disLikedVideosList} = this.state
+    if (disLikedVideosList.includes(id) === false) {
+      if (likedVideosList.includes(id)) {
+        this.setState({
+          likedVideosList: likedVideosList.filter(each => each !== id),
+          disLikedVideosList: [...disLikedVideosList, id],
+        })
+      } else {
+        this.setState({
+          disLikedVideosList: [...disLikedVideosList, id],
+        })
+      }
+    }
+  }
+
+  saveVideo = videoDetailObject => {
+    const {savedVideosList} = this.state
+    const isVideoSaved = savedVideosList.find(
+      each => videoDetailObject.id === each.id,
+    )
+    let updatedSavedVideoList
+    if (isVideoSaved) {
+      updatedSavedVideoList = savedVideosList.filter(
+        each => each.id !== videoDetailObject.id,
+      )
+    } else {
+      updatedSavedVideoList = [...savedVideosList, videoDetailObject]
+    }
+    console.log(updatedSavedVideoList)
+    this.setState({
+      savedVideosList: [...updatedSavedVideoList],
+    })
+  }
+
   render() {
-    const {isLightTheme, selectedRoute} = this.state
+    const {
+      isLightTheme,
+      selectedRoute,
+      savedVideosList,
+      disLikedVideosList,
+      likedVideosList,
+    } = this.state
     return (
       <ThemeContext.Provider
         value={{
@@ -34,6 +94,12 @@ class App extends Component {
           changeTheme: this.changeTheme,
           selectedRoute,
           onSelectedRoute: this.onSelectedRoute,
+          savedVideosList,
+          saveVideo: this.saveVideo,
+          likedVideosList,
+          videoLiked: this.videoLiked,
+          disLikedVideosList,
+          videoDisLiked: this.videoDisLiked,
         }}
       >
         <Switch>

@@ -11,7 +11,7 @@ import {
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
-// import SavedVideosRouteVideoCard from '../SavedVideosRouteVideoCard'
+import SavedVideoCard from './SavedVideoCard'
 
 class SavedVideosRoute extends Component {
   state = {
@@ -34,21 +34,17 @@ class SavedVideosRoute extends Component {
     </div>
   )
 
-  renderVideosList = fontColor => {
-    const {savedRouteVideosList} = this.state
-    if (savedRouteVideosList.length === 0) {
+  renderVideosList = (fontColor, savedVideosList) => {
+    console.log(savedVideosList, 'sac')
+    if (savedVideosList.length === 0) {
       return this.renderNoVideos(fontColor)
     }
     return (
-      <div>jefk</div>
-      /* <ul className="saved-route-video-list-container">
-        {savedRouteVideosList.map(eachVideo => (
-          <SavedVideosRouteVideoCard
-            videoDetails={eachVideo}
-            key={eachVideo.id}
-          />
+      <ul className="saved-route-video-list-container">
+        {savedVideosList.map(eachVideo => (
+          <SavedVideoCard videoDetails={eachVideo} key={eachVideo.id} />
         ))}
-      </ul> */
+      </ul>
     )
   }
 
@@ -70,7 +66,7 @@ class SavedVideosRoute extends Component {
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
-          const {isLightTheme} = value
+          const {isLightTheme, savedVideosList} = value
           const bgColor = isLightTheme ? 'saved-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           return (
@@ -86,7 +82,11 @@ class SavedVideosRoute extends Component {
                 >
                   {this.bannerContainer(isLightTheme)}
                   <div className={`${bgColor} saved-page-container`}>
-                    {this.renderVideosList(fontColor, isLightTheme)}
+                    {this.renderVideosList(
+                      fontColor,
+                      isLightTheme,
+                      savedVideosList,
+                    )}
                   </div>
                 </SavedVideosPageMainContainer>
               </div>
