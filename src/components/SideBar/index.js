@@ -1,5 +1,4 @@
 import './index.css'
-import {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {TiHome} from 'react-icons/ti'
 import {HiFire} from 'react-icons/hi'

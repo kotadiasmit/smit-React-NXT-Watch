@@ -1,6 +1,4 @@
 import './index.css'
-import {Component} from 'react'
-
 import {MdPlaylistAdd} from 'react-icons/md'
 import {
   SavedVideosPageMainContainer,
@@ -11,14 +9,10 @@ import {
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
 import SideBar from '../SideBar'
-import SavedVideoCard from './SavedVideoCard'
+import SavedVideoCard from '../SavedVideoCard'
 
-class SavedVideosRoute extends Component {
-  state = {
-    savedRouteVideosList: [],
-  }
-
-  renderNoVideos = fontColor => (
+const SavedVideosRoute = () => {
+  const renderNoVideos = fontColor => (
     <div className="not-videos-found-page-container">
       <img
         className="not-videos-found-page-img"
@@ -34,10 +28,10 @@ class SavedVideosRoute extends Component {
     </div>
   )
 
-  renderVideosList = (fontColor, savedVideosList) => {
+  const renderVideosList = (fontColor, isLightTheme, savedVideosList) => {
     console.log(savedVideosList, 'sac')
     if (savedVideosList.length === 0) {
-      return this.renderNoVideos(fontColor)
+      return renderNoVideos(fontColor)
     }
     return (
       <ul className="saved-route-video-list-container">
@@ -48,7 +42,7 @@ class SavedVideosRoute extends Component {
     )
   }
 
-  bannerContainer = isLightTheme => (
+  const bannerContainer = isLightTheme => (
     <SavedVideosBannerContainer
       isLightTheme={isLightTheme}
       data-testid="banner"
@@ -57,44 +51,39 @@ class SavedVideosRoute extends Component {
         <MdPlaylistAdd size={30} color="#ff0000" />
       </SavedVideosBannerSubContainer>
       <SavedVideosBannerPara isLightTheme={isLightTheme}>
-        SavedVideos
+        Saved Videos
       </SavedVideosBannerPara>
     </SavedVideosBannerContainer>
   )
 
-  render() {
-    return (
-      <ThemeContext.Consumer className="main-login-container">
-        {value => {
-          const {isLightTheme, savedVideosList} = value
-          const bgColor = isLightTheme ? 'saved-light' : ''
-          const fontColor = isLightTheme ? '' : 'dark'
-          return (
-            <>
-              <Header />
-              <div className="main-container">
-                <div className="sidebar-for-desktop">
-                  <SideBar />
-                </div>
-                <SavedVideosPageMainContainer
-                  isLightTheme={isLightTheme}
-                  data-testid="saved"
-                >
-                  {this.bannerContainer(isLightTheme)}
-                  <div className={`${bgColor} saved-page-container`}>
-                    {this.renderVideosList(
-                      fontColor,
-                      isLightTheme,
-                      savedVideosList,
-                    )}
-                  </div>
-                </SavedVideosPageMainContainer>
+  return (
+    <ThemeContext.Consumer className="main-login-container">
+      {value => {
+        const {isLightTheme, savedVideosList} = value
+        console.log(savedVideosList, '534')
+        const bgColor = isLightTheme ? 'saved-light' : ''
+        const fontColor = isLightTheme ? '' : 'dark'
+        return (
+          <>
+            <Header />
+            <div className="main-container">
+              <div className="sidebar-for-desktop">
+                <SideBar />
               </div>
-            </>
-          )
-        }}
-      </ThemeContext.Consumer>
-    )
-  }
+              <SavedVideosPageMainContainer
+                isLightTheme={isLightTheme}
+                data-testid="savedVideos"
+              >
+                {bannerContainer(isLightTheme)}
+                <div className={`${bgColor} saved-page-container`}>
+                  {renderVideosList(fontColor, isLightTheme, savedVideosList)}
+                </div>
+              </SavedVideosPageMainContainer>
+            </div>
+          </>
+        )
+      }}
+    </ThemeContext.Consumer>
+  )
 }
 export default SavedVideosRoute

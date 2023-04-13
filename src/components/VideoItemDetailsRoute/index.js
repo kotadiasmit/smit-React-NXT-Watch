@@ -62,7 +62,7 @@ class VideoItemDetailsRoute extends Component {
         },
         thumbnailUrl: videoDetails.thumbnail_url,
       }
-      console.log(camelCaseData)
+      // console.log(camelCaseData)
       this.setState({
         apiStatus: apiStatusConstants.success,
         videoDetailObject: camelCaseData,
@@ -128,7 +128,6 @@ class VideoItemDetailsRoute extends Component {
       videoUrl,
       viewCount,
       channel,
-      thumbnailUrl,
     } = videoDetailObject
     const {name, profileImageUrl, subscriberCount} = channel
 
@@ -167,27 +166,48 @@ class VideoItemDetailsRoute extends Component {
             <p className="other-video-card-detail">{publishedAt}</p>
           </div>
           <div className="like-save-btn-container">
-            <button type="button" className="btn" onClick={onLikeVideo}>
-              <BiLike color={isVideoLiked ? '#075ac6' : '#7e8b9e'} size={20} />
-              <p className={`other-video-card-detail ${likedColorClass}`}>
+            <button
+              type="button"
+              className={`btn ${likedColorClass}`}
+              onClick={onLikeVideo}
+            >
+              <BiLike
+                color={likedColorClass ? '#2563eb' : '#64748b'}
+                size={20}
+              />
+              <p
+                className={`other-video-card-detail my-color ${likedColorClass}`}
+              >
                 Like
               </p>
             </button>
-            <button type="button" className="btn" onClick={onDisLikeVideo}>
+            <button
+              type="button"
+              className={`btn ${disLikedColorClass}`}
+              onClick={onDisLikeVideo}
+            >
               <BiDislike
-                color={isVideoDisLiked ? '#075ac6' : '#7e8b9e'}
+                color={disLikedColorClass ? '#2563eb' : '#64748b'}
                 size={20}
               />
-              <p className={`other-video-card-detail ${disLikedColorClass}`}>
+              <p
+                className={`other-video-card-detail my-color ${disLikedColorClass}`}
+              >
                 Dislike
               </p>
             </button>
-            <button type="button" className="btn" onClick={onSaveVideo}>
+            <button
+              type="button"
+              className={`btn ${savedVideoColorClass}`}
+              onClick={onSaveVideo}
+            >
               <MdPlaylistAdd
-                color={isVideoSaved ? '#075ac6' : '#7e8b9e'}
+                color={isVideoSaved ? '#2563eb' : '#64748b'}
                 size={22}
               />
-              <p className={`other-video-card-detail ${savedVideoColorClass}`}>
+              <p
+                className={`other-video-card-detail my-color ${savedVideoColorClass}`}
+              >
                 {isVideoSaved ? 'Saved' : 'Save'}
               </p>
             </button>

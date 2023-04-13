@@ -83,8 +83,11 @@
   background-color: transparent;
   cursor: pointer;
 }
+.my-color {
+  color: #64748b;
+}
 .blue-color {
-  color: #075ac6;
+  color: #2563eb;
 }
 hr {
   width: 100%;
@@ -93,6 +96,7 @@ hr {
 }
 .video-item-card-detail {
   display: flex;
+  margin-bottom: 50px;
 }
 
 .failure-view-img {
@@ -161,6 +165,9 @@ hr {
 @media screen and (max-width: 577px) {
   .home-page-main-container {
     margin-left: 0px;
+  }
+  .videoItemDetails-page-container {
+    height: 100vh;
   }
   .loader-container {
     margin-top: 200px;

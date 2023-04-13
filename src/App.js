@@ -41,6 +41,10 @@ class App extends Component {
           likedVideosList: [...likedVideosList, id],
         })
       }
+    } else {
+      this.setState({
+        likedVideosList: likedVideosList.filter(each => each !== id),
+      })
     }
   }
 
@@ -57,6 +61,10 @@ class App extends Component {
           disLikedVideosList: [...disLikedVideosList, id],
         })
       }
+    } else {
+      this.setState({
+        disLikedVideosList: disLikedVideosList.filter(each => each !== id),
+      })
     }
   }
 
@@ -73,7 +81,7 @@ class App extends Component {
     } else {
       updatedSavedVideoList = [...savedVideosList, videoDetailObject]
     }
-    console.log(updatedSavedVideoList)
+
     this.setState({
       savedVideosList: [...updatedSavedVideoList],
     })
@@ -87,6 +95,7 @@ class App extends Component {
       disLikedVideosList,
       likedVideosList,
     } = this.state
+    console.log(savedVideosList)
     return (
       <ThemeContext.Provider
         value={{

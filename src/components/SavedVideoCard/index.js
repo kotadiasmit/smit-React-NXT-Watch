@@ -2,7 +2,7 @@ import './index.css'
 import {Link} from 'react-router-dom'
 import {formatDistanceToNow} from 'date-fns'
 import {VideoCardPara} from './styleComponent'
-import ThemeContext from '../../../context/ThemeContext'
+import ThemeContext from '../../context/ThemeContext'
 
 const SavedVideoCard = props => {
   const {videoDetails} = props
