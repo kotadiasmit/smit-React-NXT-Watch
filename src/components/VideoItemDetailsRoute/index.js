@@ -9,6 +9,8 @@ import {
   FailureViewRetryBtn,
   VideoItemDetailsPageMainContainer,
   VideoCardPara,
+  Dislike,
+  Like,
 } from './styleComponent'
 import Header from '../Header'
 import ThemeContext from '../../context/ThemeContext'
@@ -131,10 +133,10 @@ class VideoItemDetailsRoute extends Component {
     } = videoDetailObject
     const {name, profileImageUrl, subscriberCount} = channel
 
-    function onLikeVideo() {
+    const onLikeVideo = () => {
       videoLiked(id)
     }
-    function onDisLikeVideo() {
+    const onDisLikeVideo = () => {
       videoDisLiked(id)
     }
     const isVideoLiked = likedVideosList.includes(id)
@@ -166,39 +168,31 @@ class VideoItemDetailsRoute extends Component {
             <p className="other-video-card-detail">{publishedAt}</p>
           </div>
           <div className="like-save-btn-container">
-            <button
+            <Like
               type="button"
-              className={`btn ${likedColorClass}`}
+              isVideoLiked={isVideoLiked}
               onClick={onLikeVideo}
             >
               <BiLike
                 color={likedColorClass ? '#2563eb' : '#64748b'}
                 size={20}
               />
-              <p
-                className={`other-video-card-detail my-color ${likedColorClass}`}
-              >
-                Like
-              </p>
-            </button>
-            <button
+              Like
+            </Like>
+            <Dislike
               type="button"
-              className={`btn ${disLikedColorClass}`}
+              isVideoDisLiked={isVideoDisLiked}
               onClick={onDisLikeVideo}
             >
               <BiDislike
                 color={disLikedColorClass ? '#2563eb' : '#64748b'}
                 size={20}
               />
-              <p
-                className={`other-video-card-detail my-color ${disLikedColorClass}`}
-              >
-                Dislike
-              </p>
-            </button>
+              Dislike
+            </Dislike>
             <button
               type="button"
-              className={`btn ${savedVideoColorClass}`}
+              className={`btn my-color ${savedVideoColorClass}`}
               onClick={onSaveVideo}
             >
               <MdPlaylistAdd

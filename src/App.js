@@ -95,7 +95,9 @@ class App extends Component {
       disLikedVideosList,
       likedVideosList,
     } = this.state
-    console.log(savedVideosList)
+    // console.log(savedVideosList)
+    const {location} = this.state
+    console.log(location)
     return (
       <ThemeContext.Provider
         value={{

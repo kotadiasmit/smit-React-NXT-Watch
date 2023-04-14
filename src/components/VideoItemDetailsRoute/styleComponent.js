@@ -28,3 +28,23 @@ export const VideoCardPara = styled.p`
   font-size: 14px;
   font-weight: 400;
 `
+export const Like = styled.button`
+  color: ${props => (props.isVideoLiked ? '#2563eb' : '#64748b')};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin-left: 10px;
+  background-color: transparent;
+  cursor: pointer;
+`
+export const Dislike = styled.button`
+  color: ${props => (props.isVideoDisLiked ? '#2563eb' : '#64748b')};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  margin-left: 10px;
+  background-color: transparent;
+  cursor: pointer;
+`
