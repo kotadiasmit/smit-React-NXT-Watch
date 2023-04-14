@@ -2,14 +2,14 @@ import './App.css'
 import {Component} from 'react'
 import {Switch, Redirect, Route, BrowserRouter} from 'react-router-dom'
 import ThemeContext from './context/ThemeContext'
-import HomeRoute from './components/HomeRoute'
 import LoginRoute from './components/LoginRoute'
 import NotFound from './components/NotFound'
-import GamingRoute from './components/GamingRoute'
-import SavedVideos from './components/SavedVideos'
-import TrendingRoute from './components/TrendingRoute'
 import VideoItemDetailsRoute from './components/VideoItemDetailsRoute'
 import ProtectedRoute from './components/ProtectedRoute'
+import HomeRoute from './components/Home/HomeRoute'
+import GamingRoute from './components/Gaming/GamingRoute'
+import SavedVideosRoute from './components/SavedVideos/SavedVideosRoute'
+import TrendingRoute from './components/Trending/TrendingRoute'
 
 class App extends Component {
   state = {
@@ -126,7 +126,7 @@ class App extends Component {
             <ProtectedRoute
               exact
               path="/saved-videos"
-              component={SavedVideos}
+              component={SavedVideosRoute}
             />
             <Route exact path="/not-found" component={NotFound} />
             <Redirect to="/not-found" />

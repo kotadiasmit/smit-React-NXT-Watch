@@ -199,11 +199,8 @@ class VideoItemDetailsRoute extends Component {
                 color={isVideoSaved ? '#2563eb' : '#64748b'}
                 size={22}
               />
-              <p
-                className={`other-video-card-detail my-color ${savedVideoColorClass}`}
-              >
-                {isVideoSaved ? 'Saved' : 'Save'}
-              </p>
+
+              {isVideoSaved ? 'Saved' : 'Save'}
             </button>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import './index.css'
 import {Link} from 'react-router-dom'
 import {VideoCardPara} from './styleComponent'
-import ThemeContext from '../../context/ThemeContext'
+import ThemeContext from '../../../context/ThemeContext'
 
 const HomeRouteVideoCard = props => {
   const {videoDetails} = props

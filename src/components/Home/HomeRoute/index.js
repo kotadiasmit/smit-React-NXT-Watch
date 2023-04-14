@@ -1,19 +1,18 @@
 import './index.css'
 import {Component} from 'react'
+import {BsSearch} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {HiFire} from 'react-icons/hi'
+import {AiOutlineClose} from 'react-icons/ai'
 import {
   FailureViewRetryBtn,
-  TrendingPageMainContainer,
-  TrendingBannerContainer,
-  TrendingBannerSubContainer,
-  TrendingBannerPara,
+  HomePageMainContainer,
+  HomeBannerContainer,
 } from './styleComponent'
-import Header from '../Header'
-import ThemeContext from '../../context/ThemeContext'
-import SideBar from '../SideBar'
-import TrendingRouteVideoCard from '../TrendingRouteVideoCard'
+import Header from '../../Header'
+import ThemeContext from '../../../context/ThemeContext'
+import SideBar from '../../SideBar'
+import HomeRouteVideoCard from '../HomeRouteVideoCard'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -22,10 +21,12 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class TrendingRoute extends Component {
+class HomeRoute extends Component {
   state = {
+    searchInput: '',
     apiStatus: apiStatusConstants.initial,
-    trendingRouteVideosList: [],
+    homeRouteVideosList: [],
+    closeBanner: false,
   }
 
   componentDidMount() {
@@ -34,19 +35,28 @@ class TrendingRoute extends Component {
 
   getVideosListApi = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
+    const {searchInput} = this.state
     const jwtToken = Cookies.get('jwt_token')
-    const TrendingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/trending`
+    const homeRouteVideosFetchUrl = `https://apis.ccbp.in/videos/all?search=${searchInput}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const response = await fetch(TrendingRouteVideosFetchUrl, options)
+    const response = await fetch(homeRouteVideosFetchUrl, options)
     const data = await response.json()
+    const GamingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/gaming`
+    const GamingRouteVideosResponse = await fetch(
+      GamingRouteVideosFetchUrl,
+      options,
+    )
+    const GamingData = await GamingRouteVideosResponse.json()
+
+    let camelCaseData = []
 
     if (response.ok) {
-      const camelCaseData = data.videos.map(each => ({
+      const homeCamelCaseData = data.videos.map(each => ({
         id: each.id,
         title: each.title,
         publishedAt: each.published_at,
@@ -57,16 +67,35 @@ class TrendingRoute extends Component {
         },
         thumbnailUrl: each.thumbnail_url,
       }))
-      // console.log(camelCaseData)
-      this.setState({
-        apiStatus: apiStatusConstants.success,
-        trendingRouteVideosList: camelCaseData,
-      })
+      camelCaseData = [...homeCamelCaseData]
     } else {
       this.setState({
         apiStatus: apiStatusConstants.failure,
       })
     }
+
+    if (GamingRouteVideosResponse.ok) {
+      const GamingCamelCaseData = GamingData.videos.map(each => ({
+        id: each.id,
+        title: each.title,
+        publishedAt: `${Math.ceil(Math.random() * 3)} years ago`,
+        viewCount: each.view_count,
+        channel: {
+          name: each.title,
+          profileImageUrl: each.thumbnail_url,
+        },
+        thumbnailUrl: each.thumbnail_url,
+      }))
+      camelCaseData = [...camelCaseData, ...GamingCamelCaseData]
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
+    }
+    this.setState({
+      apiStatus: apiStatusConstants.success,
+      homeRouteVideosList: camelCaseData,
+    })
   }
 
   onSearchRetryClicked = () => {
@@ -96,15 +125,15 @@ class TrendingRoute extends Component {
     </div>
   )
 
-  renderVideosList = isLightTheme => {
-    const {trendingRouteVideosList} = this.state
-    if (trendingRouteVideosList.length === 0) {
-      return this.renderNoVideos(isLightTheme)
+  renderVideosList = fontColor => {
+    const {homeRouteVideosList} = this.state
+    if (homeRouteVideosList.length === 0) {
+      return this.renderNoVideos(fontColor)
     }
     return (
-      <ul className="trending-route-video-list-container">
-        {trendingRouteVideosList.map(eachVideo => (
-          <TrendingRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
+      <ul className="home-route-video-list-container">
+        {homeRouteVideosList.map(eachVideo => (
+          <HomeRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
         ))}
       </ul>
     )
@@ -161,23 +190,50 @@ class TrendingRoute extends Component {
     }
   }
 
-  bannerContainer = isLightTheme => (
-    <TrendingBannerContainer isLightTheme={isLightTheme} data-testid="banner">
-      <TrendingBannerSubContainer isLightTheme={isLightTheme}>
-        <HiFire size={30} color="#ff0000" />
-      </TrendingBannerSubContainer>
-      <TrendingBannerPara isLightTheme={isLightTheme}>
-        Trending
-      </TrendingBannerPara>
-    </TrendingBannerContainer>
+  onSearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
+
+  onSearchInputBtnClicked = () => {
+    this.getVideosListApi()
+  }
+
+  onCloseBanner = () => {
+    this.setState(prevState => ({closeBanner: !prevState.closeBanner}))
+  }
+
+  bannerContainer = () => (
+    <HomeBannerContainer data-testid="banner">
+      <div className="home-banner-sub-container">
+        <img
+          alt="nxt watch logo"
+          className="website-logo"
+          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
+        />
+        <p>Buy Nxt Watch Premium prepaid plans with UPI</p>
+        <button type="button" className="get-now-btn">
+          GET IT NOW
+        </button>
+      </div>
+      <button
+        className="banner-close-btn"
+        onClick={this.onCloseBanner}
+        data-testid="close"
+        type="button"
+      >
+        <AiOutlineClose />
+      </button>
+    </HomeBannerContainer>
   )
 
   render() {
+    const {searchInput, closeBanner} = this.state
+
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
           const {isLightTheme} = value
-          const bgColor = isLightTheme ? 'trending-light' : ''
+          const bgColor = isLightTheme ? 'home-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           const failureView = isLightTheme
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
@@ -189,19 +245,36 @@ class TrendingRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <TrendingPageMainContainer
+                <HomePageMainContainer
                   isLightTheme={isLightTheme}
-                  data-testid="trending"
+                  data-testid="home"
                 >
-                  {this.bannerContainer(isLightTheme)}
-                  <div className={`${bgColor} trending-page-container`}>
+                  {closeBanner ? '' : this.bannerContainer()}
+                  <div className={`${bgColor} home-page-container`}>
+                    <div className="search-bar-container">
+                      <input
+                        className={`search-input ${fontColor}`}
+                        type="search"
+                        placeholder="Search"
+                        onChange={this.onSearchInput}
+                        value={searchInput}
+                      />
+                      <button
+                        type="button"
+                        className="search-btn"
+                        onClick={this.onSearchInputBtnClicked}
+                        data-testid="searchButton"
+                      >
+                        <BsSearch size={18} color="#e6ebf1" />
+                      </button>
+                    </div>
                     {this.returnSwitchStatement(
                       failureView,
                       fontColor,
                       isLightTheme,
                     )}
                   </div>
-                </TrendingPageMainContainer>
+                </HomePageMainContainer>
               </div>
             </>
           )
@@ -210,4 +283,4 @@ class TrendingRoute extends Component {
     )
   }
 }
-export default TrendingRoute
+export default HomeRoute

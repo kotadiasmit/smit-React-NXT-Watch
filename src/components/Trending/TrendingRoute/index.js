@@ -2,18 +2,18 @@ import './index.css'
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {GiGamepad} from 'react-icons/gi'
+import {HiFire} from 'react-icons/hi'
 import {
   FailureViewRetryBtn,
-  GamingPageMainContainer,
-  GamingBannerContainer,
-  GamingBannerSubContainer,
-  GamingBannerPara,
+  TrendingPageMainContainer,
+  TrendingBannerContainer,
+  TrendingBannerSubContainer,
+  TrendingBannerPara,
 } from './styleComponent'
-import Header from '../Header'
-import ThemeContext from '../../context/ThemeContext'
-import SideBar from '../SideBar'
-import GamingRouteVideoCard from '../GamingRouteVideoCard'
+import Header from '../../Header'
+import ThemeContext from '../../../context/ThemeContext'
+import SideBar from '../../SideBar'
+import TrendingRouteVideoCard from '../TrendingRouteVideoCard'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -22,10 +22,10 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class GamingRoute extends Component {
+class TrendingRoute extends Component {
   state = {
     apiStatus: apiStatusConstants.initial,
-    gamingRouteVideosList: [],
+    trendingRouteVideosList: [],
   }
 
   componentDidMount() {
@@ -35,27 +35,32 @@ class GamingRoute extends Component {
   getVideosListApi = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
     const jwtToken = Cookies.get('jwt_token')
-    const GamingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/gaming`
+    const TrendingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/trending`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const response = await fetch(GamingRouteVideosFetchUrl, options)
+    const response = await fetch(TrendingRouteVideosFetchUrl, options)
     const data = await response.json()
 
     if (response.ok) {
       const camelCaseData = data.videos.map(each => ({
         id: each.id,
         title: each.title,
+        publishedAt: each.published_at,
         viewCount: each.view_count,
+        channel: {
+          name: each.channel.name,
+          profileImageUrl: each.channel.profile_image_url,
+        },
         thumbnailUrl: each.thumbnail_url,
       }))
       // console.log(camelCaseData)
       this.setState({
         apiStatus: apiStatusConstants.success,
-        gamingRouteVideosList: camelCaseData,
+        trendingRouteVideosList: camelCaseData,
       })
     } else {
       this.setState({
@@ -92,14 +97,14 @@ class GamingRoute extends Component {
   )
 
   renderVideosList = isLightTheme => {
-    const {gamingRouteVideosList} = this.state
-    if (gamingRouteVideosList.length === 0) {
+    const {trendingRouteVideosList} = this.state
+    if (trendingRouteVideosList.length === 0) {
       return this.renderNoVideos(isLightTheme)
     }
     return (
-      <ul className="gaming-route-video-list-container">
-        {gamingRouteVideosList.map(eachVideo => (
-          <GamingRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
+      <ul className="trending-route-video-list-container">
+        {trendingRouteVideosList.map(eachVideo => (
+          <TrendingRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
         ))}
       </ul>
     )
@@ -157,12 +162,14 @@ class GamingRoute extends Component {
   }
 
   bannerContainer = isLightTheme => (
-    <GamingBannerContainer isLightTheme={isLightTheme} data-testid="banner">
-      <GamingBannerSubContainer isLightTheme={isLightTheme}>
-        <GiGamepad size={30} color="#ff0000" />
-      </GamingBannerSubContainer>
-      <GamingBannerPara isLightTheme={isLightTheme}>Gaming</GamingBannerPara>
-    </GamingBannerContainer>
+    <TrendingBannerContainer isLightTheme={isLightTheme} data-testid="banner">
+      <TrendingBannerSubContainer isLightTheme={isLightTheme}>
+        <HiFire size={30} color="#ff0000" />
+      </TrendingBannerSubContainer>
+      <TrendingBannerPara isLightTheme={isLightTheme}>
+        Trending
+      </TrendingBannerPara>
+    </TrendingBannerContainer>
   )
 
   render() {
@@ -170,7 +177,7 @@ class GamingRoute extends Component {
       <ThemeContext.Consumer className="main-login-container">
         {value => {
           const {isLightTheme} = value
-          const bgColor = isLightTheme ? 'gaming-light' : ''
+          const bgColor = isLightTheme ? 'trending-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           const failureView = isLightTheme
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
@@ -182,19 +189,19 @@ class GamingRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <GamingPageMainContainer
+                <TrendingPageMainContainer
                   isLightTheme={isLightTheme}
-                  data-testid="gaming"
+                  data-testid="trending"
                 >
                   {this.bannerContainer(isLightTheme)}
-                  <div className={`${bgColor} gaming-page-container`}>
+                  <div className={`${bgColor} trending-page-container`}>
                     {this.returnSwitchStatement(
                       failureView,
                       fontColor,
                       isLightTheme,
                     )}
                   </div>
-                </GamingPageMainContainer>
+                </TrendingPageMainContainer>
               </div>
             </>
           )
@@ -203,4 +210,4 @@ class GamingRoute extends Component {
     )
   }
 }
-export default GamingRoute
+export default TrendingRoute

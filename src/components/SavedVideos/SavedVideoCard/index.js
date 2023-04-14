@@ -1,9 +1,9 @@
 import './index.css'
 import {Link} from 'react-router-dom'
 import {VideoCardPara} from './styleComponent'
-import ThemeContext from '../../context/ThemeContext'
+import ThemeContext from '../../../context/ThemeContext'
 
-const TrendingRouteVideoCard = props => {
+const SavedVideoCard = props => {
   const {videoDetails} = props
   const {
     channel,
@@ -21,16 +21,16 @@ const TrendingRouteVideoCard = props => {
         return (
           <>
             <Link to={`/videos/${id}`} className="route-link">
-              <li className="trending-video-card-details-container">
+              <li className="saved-video-card-details-container">
                 <img
                   src={thumbnailUrl}
-                  className="thumbnail-img"
+                  className="saved-card-thumbnail-img"
                   alt="video thumbnail"
                 />
-                <div className="trending-video-card-detail">
+                <div className="saved-video-card-detail">
                   <img
                     src={channel.profileImageUrl}
-                    className="trending-profile-img"
+                    className="saved-profile-img"
                     alt="channel logo"
                   />
                   <div>
@@ -55,4 +55,4 @@ const TrendingRouteVideoCard = props => {
     </ThemeContext.Consumer>
   )
 }
-export default TrendingRouteVideoCard
+export default SavedVideoCard

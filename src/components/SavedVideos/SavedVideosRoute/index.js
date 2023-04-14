@@ -6,9 +6,9 @@ import {
   SavedVideosBannerSubContainer,
   SavedVideosBannerPara,
 } from './styleComponent'
-import Header from '../Header'
-import ThemeContext from '../../context/ThemeContext'
-import SideBar from '../SideBar'
+import Header from '../../Header'
+import ThemeContext from '../../../context/ThemeContext'
+import SideBar from '../../SideBar'
 import SavedVideoCard from '../SavedVideoCard'
 
 const SavedVideosRoute = () => {

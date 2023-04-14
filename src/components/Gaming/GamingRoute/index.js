@@ -1,18 +1,19 @@
 import './index.css'
 import {Component} from 'react'
-import {BsSearch} from 'react-icons/bs'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {AiOutlineClose} from 'react-icons/ai'
+import {GiGamepad} from 'react-icons/gi'
 import {
   FailureViewRetryBtn,
-  HomePageMainContainer,
-  HomeBannerContainer,
+  GamingPageMainContainer,
+  GamingBannerContainer,
+  GamingBannerSubContainer,
+  GamingBannerPara,
 } from './styleComponent'
-import Header from '../Header'
-import ThemeContext from '../../context/ThemeContext'
-import SideBar from '../SideBar'
-import HomeRouteVideoCard from '../HomeRouteVideoCard'
+import Header from '../../Header'
+import ThemeContext from '../../../context/ThemeContext'
+import SideBar from '../../SideBar'
+import GamingRouteVideoCard from '../GamingRouteVideoCard'
 
 const apiStatusConstants = {
   initial: 'INITIAL',
@@ -21,12 +22,10 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
-class HomeRoute extends Component {
+class GamingRoute extends Component {
   state = {
-    searchInput: '',
     apiStatus: apiStatusConstants.initial,
-    homeRouteVideosList: [],
-    closeBanner: false,
+    gamingRouteVideosList: [],
   }
 
   componentDidMount() {
@@ -35,67 +34,34 @@ class HomeRoute extends Component {
 
   getVideosListApi = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
-    const {searchInput} = this.state
     const jwtToken = Cookies.get('jwt_token')
-    const homeRouteVideosFetchUrl = `https://apis.ccbp.in/videos/all?search=${searchInput}`
+    const GamingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/gaming`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
       method: 'GET',
     }
-    const response = await fetch(homeRouteVideosFetchUrl, options)
+    const response = await fetch(GamingRouteVideosFetchUrl, options)
     const data = await response.json()
-    const GamingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/gaming`
-    const GamingRouteVideosResponse = await fetch(
-      GamingRouteVideosFetchUrl,
-      options,
-    )
-    const GamingData = await GamingRouteVideosResponse.json()
-
-    let camelCaseData = []
 
     if (response.ok) {
-      const homeCamelCaseData = data.videos.map(each => ({
+      const camelCaseData = data.videos.map(each => ({
         id: each.id,
         title: each.title,
-        publishedAt: each.published_at,
         viewCount: each.view_count,
-        channel: {
-          name: each.channel.name,
-          profileImageUrl: each.channel.profile_image_url,
-        },
         thumbnailUrl: each.thumbnail_url,
       }))
-      camelCaseData = [...homeCamelCaseData]
+      // console.log(camelCaseData)
+      this.setState({
+        apiStatus: apiStatusConstants.success,
+        gamingRouteVideosList: camelCaseData,
+      })
     } else {
       this.setState({
         apiStatus: apiStatusConstants.failure,
       })
     }
-
-    if (GamingRouteVideosResponse.ok) {
-      const GamingCamelCaseData = GamingData.videos.map(each => ({
-        id: each.id,
-        title: each.title,
-        publishedAt: `${Math.ceil(Math.random() * 3)} years ago`,
-        viewCount: each.view_count,
-        channel: {
-          name: each.title,
-          profileImageUrl: each.thumbnail_url,
-        },
-        thumbnailUrl: each.thumbnail_url,
-      }))
-      camelCaseData = [...camelCaseData, ...GamingCamelCaseData]
-    } else {
-      this.setState({
-        apiStatus: apiStatusConstants.failure,
-      })
-    }
-    this.setState({
-      apiStatus: apiStatusConstants.success,
-      homeRouteVideosList: camelCaseData,
-    })
   }
 
   onSearchRetryClicked = () => {
@@ -125,15 +91,15 @@ class HomeRoute extends Component {
     </div>
   )
 
-  renderVideosList = fontColor => {
-    const {homeRouteVideosList} = this.state
-    if (homeRouteVideosList.length === 0) {
-      return this.renderNoVideos(fontColor)
+  renderVideosList = isLightTheme => {
+    const {gamingRouteVideosList} = this.state
+    if (gamingRouteVideosList.length === 0) {
+      return this.renderNoVideos(isLightTheme)
     }
     return (
-      <ul className="home-route-video-list-container">
-        {homeRouteVideosList.map(eachVideo => (
-          <HomeRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
+      <ul className="gaming-route-video-list-container">
+        {gamingRouteVideosList.map(eachVideo => (
+          <GamingRouteVideoCard videoDetails={eachVideo} key={eachVideo.id} />
         ))}
       </ul>
     )
@@ -190,50 +156,21 @@ class HomeRoute extends Component {
     }
   }
 
-  onSearchInput = event => {
-    this.setState({searchInput: event.target.value})
-  }
-
-  onSearchInputBtnClicked = () => {
-    this.getVideosListApi()
-  }
-
-  onCloseBanner = () => {
-    this.setState(prevState => ({closeBanner: !prevState.closeBanner}))
-  }
-
-  bannerContainer = () => (
-    <HomeBannerContainer data-testid="banner">
-      <div className="home-banner-sub-container">
-        <img
-          alt="nxt watch logo"
-          className="website-logo"
-          src="https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png"
-        />
-        <p>Buy Nxt Watch Premium prepaid plans with UPI</p>
-        <button type="button" className="get-now-btn">
-          GET IT NOW
-        </button>
-      </div>
-      <button
-        className="banner-close-btn"
-        onClick={this.onCloseBanner}
-        data-testid="close"
-        type="button"
-      >
-        <AiOutlineClose />
-      </button>
-    </HomeBannerContainer>
+  bannerContainer = isLightTheme => (
+    <GamingBannerContainer isLightTheme={isLightTheme} data-testid="banner">
+      <GamingBannerSubContainer isLightTheme={isLightTheme}>
+        <GiGamepad size={30} color="#ff0000" />
+      </GamingBannerSubContainer>
+      <GamingBannerPara isLightTheme={isLightTheme}>Gaming</GamingBannerPara>
+    </GamingBannerContainer>
   )
 
   render() {
-    const {searchInput, closeBanner} = this.state
-
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {
           const {isLightTheme} = value
-          const bgColor = isLightTheme ? 'home-light' : ''
+          const bgColor = isLightTheme ? 'gaming-light' : ''
           const fontColor = isLightTheme ? '' : 'dark'
           const failureView = isLightTheme
             ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
@@ -245,36 +182,19 @@ class HomeRoute extends Component {
                 <div className="sidebar-for-desktop">
                   <SideBar />
                 </div>
-                <HomePageMainContainer
+                <GamingPageMainContainer
                   isLightTheme={isLightTheme}
-                  data-testid="home"
+                  data-testid="gaming"
                 >
-                  {closeBanner ? '' : this.bannerContainer()}
-                  <div className={`${bgColor} home-page-container`}>
-                    <div className="search-bar-container">
-                      <input
-                        className={`search-input ${fontColor}`}
-                        type="search"
-                        placeholder="Search"
-                        onChange={this.onSearchInput}
-                        value={searchInput}
-                      />
-                      <button
-                        type="button"
-                        className="search-btn"
-                        onClick={this.onSearchInputBtnClicked}
-                        data-testid="searchButton"
-                      >
-                        <BsSearch size={18} color="#e6ebf1" />
-                      </button>
-                    </div>
+                  {this.bannerContainer(isLightTheme)}
+                  <div className={`${bgColor} gaming-page-container`}>
                     {this.returnSwitchStatement(
                       failureView,
                       fontColor,
                       isLightTheme,
                     )}
                   </div>
-                </HomePageMainContainer>
+                </GamingPageMainContainer>
               </div>
             </>
           )
@@ -283,4 +203,4 @@ class HomeRoute extends Component {
     )
   }
 }
-export default HomeRoute
+export default GamingRoute
