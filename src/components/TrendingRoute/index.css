@@ -59,11 +59,10 @@
 }
 .trending-route-video-list-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding-left: 0px;
-  flex-wrap: wrap;
   height: 100vh;
 }
 .not-videos-found-page-container {

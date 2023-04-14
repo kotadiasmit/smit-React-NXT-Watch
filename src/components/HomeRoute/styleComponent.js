@@ -30,4 +30,7 @@ export const HomeBannerContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 15px;
+  @media screen and (max-width: 577px) {
+    margin-top: 10px;
+  }
 `

@@ -1,6 +1,6 @@
 import './App.css'
 import {Component} from 'react'
-import {Switch, Redirect, Route} from 'react-router-dom'
+import {Switch, Redirect, Route, BrowserRouter} from 'react-router-dom'
 import ThemeContext from './context/ThemeContext'
 import HomeRoute from './components/HomeRoute'
 import LoginRoute from './components/LoginRoute'
@@ -14,7 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 class App extends Component {
   state = {
     isLightTheme: true,
-    selectedRoute: '/',
+    selectedRoute: window.location.pathname,
     savedVideosList: [],
     likedVideosList: [],
     disLikedVideosList: [],
@@ -95,9 +95,8 @@ class App extends Component {
       disLikedVideosList,
       likedVideosList,
     } = this.state
-    // console.log(savedVideosList)
-    const {location} = this.state
-    console.log(location)
+    const currentLocation = window.location
+    console.log(currentLocation)
     return (
       <ThemeContext.Provider
         value={{
@@ -113,20 +112,26 @@ class App extends Component {
           videoDisLiked: this.videoDisLiked,
         }}
       >
-        <Switch>
-          <Route exact path="/login" component={LoginRoute} />
-          <ProtectedRoute exact path="/" component={HomeRoute} />
-          <ProtectedRoute
-            exact
-            path="/videos/:id"
-            component={VideoItemDetailsRoute}
-          />
-          <ProtectedRoute exact path="/trending" component={TrendingRoute} />
-          <ProtectedRoute exact path="/gaming" component={GamingRoute} />
-          <ProtectedRoute exact path="/saved-videos" component={SavedVideos} />
-          <Route exact path="/not-found" component={NotFound} />
-          <Redirect to="/not-found" />
-        </Switch>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/login" component={LoginRoute} />
+            <ProtectedRoute exact path="/" component={HomeRoute} />
+            <ProtectedRoute
+              exact
+              path="/videos/:id"
+              component={VideoItemDetailsRoute}
+            />
+            <ProtectedRoute exact path="/trending" component={TrendingRoute} />
+            <ProtectedRoute exact path="/gaming" component={GamingRoute} />
+            <ProtectedRoute
+              exact
+              path="/saved-videos"
+              component={SavedVideos}
+            />
+            <Route exact path="/not-found" component={NotFound} />
+            <Redirect to="/not-found" />
+          </Switch>
+        </BrowserRouter>
       </ThemeContext.Provider>
     )
   }

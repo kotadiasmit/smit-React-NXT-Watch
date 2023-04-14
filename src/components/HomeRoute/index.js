@@ -46,9 +46,17 @@ class HomeRoute extends Component {
     }
     const response = await fetch(homeRouteVideosFetchUrl, options)
     const data = await response.json()
+    const GamingRouteVideosFetchUrl = `https://apis.ccbp.in/videos/gaming`
+    const GamingRouteVideosResponse = await fetch(
+      GamingRouteVideosFetchUrl,
+      options,
+    )
+    const GamingData = await GamingRouteVideosResponse.json()
+
+    let camelCaseData = []
 
     if (response.ok) {
-      const camelCaseData = data.videos.map(each => ({
+      const homeCamelCaseData = data.videos.map(each => ({
         id: each.id,
         title: each.title,
         publishedAt: each.published_at,
@@ -59,16 +67,35 @@ class HomeRoute extends Component {
         },
         thumbnailUrl: each.thumbnail_url,
       }))
-      console.log(camelCaseData)
-      this.setState({
-        apiStatus: apiStatusConstants.success,
-        homeRouteVideosList: camelCaseData,
-      })
+      camelCaseData = [...homeCamelCaseData]
     } else {
       this.setState({
         apiStatus: apiStatusConstants.failure,
       })
     }
+
+    if (GamingRouteVideosResponse.ok) {
+      const GamingCamelCaseData = GamingData.videos.map(each => ({
+        id: each.id,
+        title: each.title,
+        publishedAt: `${Math.ceil(Math.random() * 3)} years ago`,
+        viewCount: each.view_count,
+        channel: {
+          name: each.title,
+          profileImageUrl: each.thumbnail_url,
+        },
+        thumbnailUrl: each.thumbnail_url,
+      }))
+      camelCaseData = [...camelCaseData, ...GamingCamelCaseData]
+    } else {
+      this.setState({
+        apiStatus: apiStatusConstants.failure,
+      })
+    }
+    this.setState({
+      apiStatus: apiStatusConstants.success,
+      homeRouteVideosList: camelCaseData,
+    })
   }
 
   onSearchRetryClicked = () => {
@@ -201,6 +228,7 @@ class HomeRoute extends Component {
 
   render() {
     const {searchInput, closeBanner} = this.state
+
     return (
       <ThemeContext.Consumer className="main-login-container">
         {value => {

@@ -1,6 +1,5 @@
 import './index.css'
 import {Link} from 'react-router-dom'
-import {formatDistanceToNow} from 'date-fns'
 import {VideoCardPara} from './styleComponent'
 import ThemeContext from '../../context/ThemeContext'
 
@@ -14,11 +13,7 @@ const SavedVideoCard = props => {
     title,
     viewCount,
   } = videoDetails
-  const uploadedAt = formatDistanceToNow(new Date(publishedAt))
-    .split(' ')
-    .slice(1)
-    .join(' ')
-  // console.log(uploadedAt)
+
   return (
     <ThemeContext.Consumer className="main-login-container">
       {value => {
@@ -29,7 +24,7 @@ const SavedVideoCard = props => {
               <li className="saved-video-card-details-container">
                 <img
                   src={thumbnailUrl}
-                  className="thumbnail-img"
+                  className="saved-card-thumbnail-img"
                   alt="video thumbnail"
                 />
                 <div className="saved-video-card-detail">

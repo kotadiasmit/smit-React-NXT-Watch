@@ -1,11 +1,13 @@
 .saved-video-card-details-container {
   list-style-type: none;
   display: flex;
+  flex-direction: row;
   margin-bottom: 50px;
   margin-right: 18px;
 }
-.thumbnail-img {
-  width: 280px;
+.saved-card-thumbnail-img {
+  width: 320px;
+  height: 185px;
 }
 .saved-video-card-detail {
   margin-top: 5px;
@@ -42,6 +44,7 @@
     flex-direction: column;
     margin-bottom: 50px;
     margin-right: 5px;
+    width: 320px;
   }
   .video-details-container {
     margin-right: 0px;

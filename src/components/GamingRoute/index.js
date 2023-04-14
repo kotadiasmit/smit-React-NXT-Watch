@@ -2,7 +2,6 @@ import './index.css'
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-
 import {GiGamepad} from 'react-icons/gi'
 import {
   FailureViewRetryBtn,

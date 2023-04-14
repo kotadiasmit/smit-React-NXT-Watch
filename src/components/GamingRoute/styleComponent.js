@@ -31,6 +31,9 @@ export const GamingBannerContainer = styled.div`
   align-items: center;
   width: 100%;
   padding: 15px;
+  @media screen and (max-width: 577px) {
+    margin-top: 10px;
+  }
 `
 export const GamingBannerSubContainer = styled.div`
   height: 50px;

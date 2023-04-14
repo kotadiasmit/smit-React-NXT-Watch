@@ -2,7 +2,6 @@ import './index.css'
 import {Component} from 'react'
 import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-
 import {HiFire} from 'react-icons/hi'
 import {
   FailureViewRetryBtn,

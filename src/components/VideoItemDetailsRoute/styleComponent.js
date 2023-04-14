@@ -35,8 +35,15 @@ export const Like = styled.button`
   align-items: center;
   border: none;
   margin-left: 10px;
+  margin-right: 0px;
+
   background-color: transparent;
   cursor: pointer;
+  @media screen and (max-width: 577px) {
+    margin-left: 0px;
+    margin-right: 10px;
+    margin-top: 8px;
+  }
 `
 export const Dislike = styled.button`
   color: ${props => (props.isVideoDisLiked ? '#2563eb' : '#64748b')};
@@ -45,6 +52,13 @@ export const Dislike = styled.button`
   align-items: center;
   border: none;
   margin-left: 10px;
+  margin-right: 0px;
+
   background-color: transparent;
   cursor: pointer;
+  @media screen and (max-width: 577px) {
+    margin-left: 0px;
+    margin-right: 10px;
+    margin-top: 8px;
+  }
 `

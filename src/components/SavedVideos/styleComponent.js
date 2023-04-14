@@ -17,7 +17,11 @@ export const SavedVideosBannerContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  margin-top: 1px;
   padding: 15px;
+  @media screen and (max-width: 577px) {
+    margin-top: 10px;
+  }
 `
 export const SavedVideosBannerSubContainer = styled.div`
   height: 50px;
